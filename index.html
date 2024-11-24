@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary to Text Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            color: #00ff00; /* Green text color */
+        }
+        .matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1; /* Send the background behind other elements */
+        }
+        .matrix span {
+            position: absolute;
+            bottom: 100%;
+            color: #00ff00;
+            white-space: nowrap;
+            font-size: 20px;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+        @media (max-width: 600px) {
+            .matrix span {
+                font-size: 15px; /* Smaller font size for smaller screens */
+            }
+        }
+        h1 {
+            text-align: center; /* Center the title */
+            margin: 20px 0; /* Add some margin for spacing */
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 20px;
+            z-index: 1; /* Bring textarea above the background */
+            position: relative;
+            background-color: black; /* Black background */
+            color: #00ff00; /* Green text color */
+            border: 4px solid green; /* Dark green outline */
+            padding: 10px; /* Padding for better text visibility */
+            box-sizing: border-box; /* Include padding in width/height */
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            z-index: 1; /* Bring button above the background */
+            position: relative;
+            background-color: black; /* Black background */
+            color: #00ff00; /* Green text color */
+            border: 1px solid #00ff00; /* Thin green border */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+        button:hover {
+            background-color: #00ff00; /* Change background on hover */
+            color: black; /* Change text color on hover */
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            z-index: 1; /* Bring result above the background */
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix" id="matrix"></div>
+    <h1>Binary to Text Translator</h1>
+    <textarea id="binaryInput" placeholder="Enter binary string (space-separated)"></textarea>
+    <button onclick="translateBinary()">Translate</button>
+    <div id="result"></div>
+ 
+    <script>
+        function binaryToText(binaryString) {
+            const binaryValues = binaryString.split(' ');
+            const asciiCharacters = binaryValues.map(bv => {
+                if (bv === '00100000') {
+                    return '(space)'; // Replace binary space with the word "(space)"
+                }
+                return String.fromCharCode(parseInt(bv, 2));
+            });
+            return asciiCharacters.join('');
+        }
+ 
+        function translateBinary() {
+            const binaryInput = document.getElementById('binaryInput').value;
+            const resultDiv = document.getElementById('result');
+            const plainText = binaryToText(binaryInput);
+            resultDiv.textContent = "Plain text: " + plainText;
+        }
+ 
+        // Generate falling code effect
+        function createMatrixEffect() {
+            const matrixContainer = document.getElementById('matrix');
+            const columns = Math.floor(window.innerWidth / 20); // Adjust based on font size
+            for (let i = 0; i < columns; i++) {
+                const span = document.createElement('span');
+                span.textContent = Math.random() < 0.5 ? '0' : '1'; // Randomly choose between 0 and 1
+                span.style.left = `${i * 20}px`; // Position each column
+                span.style.animationDuration = `${Math.random() * 2 + 3}s`; // Random fall speed
+                matrixContainer.appendChild(span);
+            }
+        }
+ 
+        createMatrixEffect();
+    </script>
+</body
